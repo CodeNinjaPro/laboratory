@@ -69,5 +69,17 @@ public class ReportController {
 
         return obj;
     }
+    
+    //Testing
+    
+    public void SaveTesting(Report data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO report(patient_id,type,category,description,status,date_time) values ('" + 1 + "','" + "tye" + "','" + "dsfs" + "','" + "dsfds" + "','" + "sdfsdf" + "','" + "2020" + "') ");
+    }
+    
+    public void SaveTestingFail(Report data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO report(patient_id,type,category,description,status,date_time) values ('" + "tye" + "','" + "dsfs" + "','" + "dsfds" + "','" + "sdfsdf" + "','" + "2020" + "') ");
+    }
 
 }

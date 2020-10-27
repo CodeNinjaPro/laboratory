@@ -53,12 +53,11 @@ public class AppointmentController {
         return objList;
     }
 
-    public List<Appointment> Search(Appointment data) throws Exception {
-        List<Appointment> objList = new ArrayList<Appointment>();
+    public Appointment Search(int id) throws Exception {
+        Appointment obj = new Appointment();
         con.getConnection();
-        ResultSet rset = con.srh("SELECT * FROM appointment WHERE appointment_id = '" + data.getAppointment_id() + "'");
+        ResultSet rset = con.srh("SELECT * FROM appointment WHERE appointment_id = '" + id + "'");
         while (rset.next()) {
-            Appointment obj = new Appointment();
             obj.setAppointment_id(rset.getInt(1));
             obj.setPatient_id(rset.getInt(2));
             obj.setDoctor_id(rset.getInt(3));
@@ -66,10 +65,33 @@ public class AppointmentController {
             obj.setAppointment_time(rset.getString(5));
             obj.setStatus(rset.getString(6));
             obj.setDate_time(rset.getString(7));
-            objList.add(obj);
         }
 
-        return objList;
+        return obj;
+    }
+
+    public int getLastID() throws Exception {
+        int id = 0;
+        con.getConnection();
+        ResultSet rset = con.srh("SELECT MAX(appointment_id) FROM appointment");
+        if (rset.next()) {
+            id = rset.getInt(1);
+        }
+
+        return id;
+    }
+
+    //Testing-------
+    //pass
+    public void SaveTesting() throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO appointment(patient_id,doctor_id,appointment_date,appointment_time,status,date_time) values ('" + 1 + "','" + 1 + "','" + "sample" + "','" + "sample" + "','" + "sample" + "','" + "2020" + "') ");
+    }
+
+    //fail
+    public void SaveTestingFail() throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO appointment(patient_id,doctor_id,appointment_date,appointment_time,status,date_time) values ('" + 1 + "','" + "sample" + "','" + "sample" + "','" + "sample" + "','" + "2020" + "') ");
     }
 
 }

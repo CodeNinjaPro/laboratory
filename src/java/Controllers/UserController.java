@@ -69,5 +69,15 @@ public class UserController {
 
         return objList;
     }
+    
+    public void SaveTesting(User data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO user(full_name,user_type,username,password,date_time) values ('" + "jjj" + "','" + "jhjh" + "','" + "jgg" + "','" + "ghg" + "','" + "2020" + "') ");
+    }
+    
+    public void SaveTestingFail(User data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO user(full_name,user_type,username,password,date_time) values ('" + "jhjh" + "','" + "jgg" + "','" + "ghg" + "','" + "2020" + "') ");
+    }
 
 }

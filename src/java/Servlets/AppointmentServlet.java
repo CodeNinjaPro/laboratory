@@ -2,6 +2,18 @@ package Servlets;
 
 import Models.Appointment;
 import Controllers.AppointmentController;
+import Controllers.EmailController;
+import Controllers.PatientController;
+import Models.Patient;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -44,7 +56,67 @@ public class AppointmentServlet extends HttpServlet {
                 obj.setDate_time(date_time);
                 try {
                     AppointmentController.getInstance().Save(obj);
-                    response.getWriter().println("Saved!");
+                    int appointment_id = AppointmentController.getInstance().getLastID();
+                    String file = "C:/xampp/htdocs/Reports/" + appointment_id + ".pdf";
+
+                    Document doc = new Document();
+
+                    PdfWriter.getInstance(doc, new FileOutputStream(file));
+                    doc.open();
+
+                    Paragraph topic = new Paragraph();
+                    topic.add("ABC Laboratory");
+                    topic.setAlignment(Element.ALIGN_LEFT);
+
+                    Paragraph d = new Paragraph();
+                    d.add(current_date);
+                    d.setAlignment(Element.ALIGN_LEFT);
+
+                    Paragraph para = new Paragraph();
+                    para.add("Appointment Conformation Report");
+                    para.setAlignment(Element.ALIGN_CENTER);
+
+                    doc.add(topic);
+                    doc.add(d);
+                    doc.add(para);
+                    doc.add(Chunk.NEWLINE);
+                    doc.add(Chunk.NEWLINE);
+
+                    float x[] = {5, 15, 15, 15, 15, 15, 15};
+
+                    PdfPTable table = new PdfPTable(x);
+                    table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                    table.addCell("ID");
+                    table.addCell("Patient ID");
+                    table.addCell("Doctor ID");
+                    table.addCell("Date");
+                    table.addCell("Time");
+                    table.addCell("Status");
+                    table.addCell("Time");
+
+                    table.setHeaderRows(1);
+
+                    PdfPCell[] cells = table.getRow(0).getCells();
+                    for (int i = 0; i < cells.length; i++) {
+                        cells[i].setBackgroundColor(BaseColor.DARK_GRAY);
+                    }
+
+                    Appointment appointment = AppointmentController.getInstance().Search(appointment_id);
+                    table.addCell(appointment.getAppointment_id() + "");
+                    table.addCell(appointment.getPatient_id() + "");
+                    table.addCell(appointment.getDoctor_id() + "");
+                    table.addCell(appointment.getAppointment_date() + "");
+                    table.addCell(appointment.getAppointment_time() + "");
+                    table.addCell(appointment.getStatus() + "");
+                    table.addCell(appointment.getDate_time() + "");
+                    doc.add(table);
+                    doc.close();
+
+                    Patient patient = PatientController.getInstance().Search(appointment.getPatient_id());
+                    EmailController.getInstance().sendMain(patient.getEmail(), "Appointment Conformation", "This is auto generated mail. Please do not reply", "C:/xampp/htdocs/Reports/" + appointment_id + ".pdf");
+
+                    response.getWriter().println("Saved! Email has been sent to Patient");
                 } catch (Exception ex) {
                     //error
                 }
@@ -66,7 +138,65 @@ public class AppointmentServlet extends HttpServlet {
                 obj.setDate_time(date_time);
                 try {
                     AppointmentController.getInstance().Update(obj);
-                    response.getWriter().println("Updated!");
+                    String file = "C:/xampp/htdocs/Reports/" + appointment_id + ".pdf";
+
+                    Document doc = new Document();
+
+                    PdfWriter.getInstance(doc, new FileOutputStream(file));
+                    doc.open();
+
+                    Paragraph topic = new Paragraph();
+                    topic.add("ABC Laboratory");
+                    topic.setAlignment(Element.ALIGN_LEFT);
+
+                    Paragraph d = new Paragraph();
+                    d.add(current_date);
+                    d.setAlignment(Element.ALIGN_LEFT);
+
+                    Paragraph para = new Paragraph();
+                    para.add("Appointment Conformation Report");
+                    para.setAlignment(Element.ALIGN_CENTER);
+
+                    doc.add(topic);
+                    doc.add(d);
+                    doc.add(para);
+                    doc.add(Chunk.NEWLINE);
+                    doc.add(Chunk.NEWLINE);
+
+                    float x[] = {5, 15, 15, 15, 15, 15, 15};
+
+                    PdfPTable table = new PdfPTable(x);
+                    table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                    table.addCell("ID");
+                    table.addCell("Patient ID");
+                    table.addCell("Doctor ID");
+                    table.addCell("Date");
+                    table.addCell("Time");
+                    table.addCell("Status");
+                    table.addCell("Time");
+
+                    table.setHeaderRows(1);
+
+                    PdfPCell[] cells = table.getRow(0).getCells();
+                    for (int i = 0; i < cells.length; i++) {
+                        cells[i].setBackgroundColor(BaseColor.DARK_GRAY);
+                    }
+
+                    Appointment appointment = AppointmentController.getInstance().Search(appointment_id);
+                    table.addCell(appointment.getAppointment_id() + "");
+                    table.addCell(appointment.getPatient_id() + "");
+                    table.addCell(appointment.getDoctor_id() + "");
+                    table.addCell(appointment.getAppointment_date() + "");
+                    table.addCell(appointment.getAppointment_time() + "");
+                    table.addCell(appointment.getStatus() + "");
+                    table.addCell(appointment.getDate_time() + "");
+                    doc.add(table);
+                    doc.close();
+
+                    Patient patient = PatientController.getInstance().Search(appointment.getPatient_id());
+                    EmailController.getInstance().sendMain(patient.getEmail(), "Appointment Conformation", "This is auto generated mail. Please do not reply", "C:/xampp/htdocs/Reports/" + appointment_id + ".pdf");
+                    response.getWriter().println("Updated! Email has been sent to Patient");
                 } catch (Exception ex) {
                     //error
                 }

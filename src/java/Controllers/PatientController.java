@@ -75,5 +75,16 @@ public class PatientController {
 
         return obj;
     }
+    
+    //Testing
+    public void SaveTesting(Patient data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO patient(name,address,dob,nic,contact,email,username,password,date_time) values ('" + "kk" + "','" + "dd" + "','" + "1994" + "','" + "888v" + "','" + "011254" + "','" + "a@gmail.com" + "','" + "sdfdf" + "','" + "dsfsdf" + "','" + "iiio" + "') ");
+    }
+    
+    public void SaveTestingFail(Patient data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO patient(name,address,dob,nic,contact,email,username,password,date_time) values ('" + "dd" + "','" + "1994" + "','" + "888v" + "','" + "011254" + "','" + "a@gmail.com" + "','" + "sdfdf" + "','" + "dsfsdf" + "','" + "iiio" + "') ");
+    }
 
 }

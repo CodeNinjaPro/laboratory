@@ -50,20 +50,39 @@ public class PaymentController {
         return objList;
     }
 
-    public List<Payment> Search(Payment data) throws Exception {
-        List<Payment> objList = new ArrayList<Payment>();
+    public Payment Search(int id) throws Exception {
+        Payment obj = new Payment();
         con.getConnection();
-        ResultSet rset = con.srh("SELECT * FROM payment WHERE payment_id = '" + data.getPayment_id() + "'");
+        ResultSet rset = con.srh("SELECT * FROM payment WHERE payment_id = '" + id + "'");
         while (rset.next()) {
-            Payment obj = new Payment();
             obj.setPayment_id(rset.getInt(1));
             obj.setAppointment_id(rset.getInt(2));
             obj.setAmount(rset.getDouble(3));
             obj.setDate_time(rset.getString(4));
-            objList.add(obj);
         }
 
-        return objList;
+        return obj;
+    }
+
+    public int getLastID() throws Exception {
+        int id = 0;
+        con.getConnection();
+        ResultSet rset = con.srh("SELECT MAX(payment_id) FROM payment");
+        if (rset.next()) {
+            id = rset.getInt(1);
+        }
+
+        return id;
+    }
+    
+    //Testing
+    public void SaveTesting(Payment data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO payment(appointment_id,amount,date_time) values ('" + 1 + "','" + 5020 + "','" + "2020" + "') ");
+    }
+    public void SaveTestingFail(Payment data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO payment(appointment_id,amount,date_time) values ('" + 5020 + "','" + "2020" + "') ");
     }
 
 }

@@ -73,5 +73,16 @@ public class DoctorController {
 
         return objList;
     }
+    
+    //Testing---
+    public void SaveTesting(Doctor data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO doctor(name,specialization,available_days,available_time,email,contact,date_time) values ('" + 1 + "','" + 1 + "','" + "Weekend" + "','" + "0800" + "','" + "kk@gmail.com" + "','" + "01145469874589" + "','" + "2020" + "') ");
+    }
+    
+    public void SaveTestingFail(Doctor data) throws Exception {
+        con.getConnection();
+        con.aud("INSERT INTO doctor(name,specialization,available_days,available_time,email,contact,date_time) values ('" + 1 + "','" + "Weekend" + "','" + "0800" + "','" + "kk@gmail.com" + "','" + "01145469874589" + "','" + "2020" + "') ");
+    }
 
 }
